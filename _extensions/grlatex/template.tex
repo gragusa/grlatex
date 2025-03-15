@@ -1,24 +1,9 @@
-$if(bibengine)$
-$if(bibengine == "biblatex")$
-	% !BIB program = biber
-$endif$
-$if(bibengine == "bibtex")$
-  % !BIB program = biber
-$endif$
-$endif
-
-\documentclass[
-$if(classoption)$
-  $for(classoption)$$classoption$$sep$,$endfor$
-$endif$
-]{grlatex}
+\documentclass[$if(classoption)$$for(classoption)$$classoption$$sep$,$endfor$$if(biblatex)$,bibengine=biblatex$endif$$if(bibtex)$,bibengine=bibtex$endif$$endif$]{grlatex}
 
 
-$if(bibengine)$
-$if(bibengine == "biblatex")$
-\addbibresource{$bibliography}
+$if(biblatex)$
+\addbibresource{$bibliography$}
 $endif$
-$endif
 
 
 % Load necessary packages
@@ -39,14 +24,12 @@ $highlighting-macros$
 $endif$
 
 % Title information
-\title{$title$}
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
 
 % Author information with multiple authors and thanks
-\author{%
-$for(author)$
-  $author.name$$if(author.thanks)$\thanks{$author.thanks$}$endif$$if(author.affiliation)$\\$author.affiliation$$endif$$if(author.email)$\\$author.email$$endif$
-  $sep$ \and $endfor$
-}
+\author{$for(author)$$author$ $affiliation$ \and $endfor$}
 
 % Date
 $if(date)$
@@ -57,20 +40,24 @@ $endif$
 
 % Begin document
 \begin{document}
-
+$for(include-before)$
+$include-before$
+$endfor$
 % Make title
 \maketitle
 
-% Abstract and keywords
 $if(abstract)$
 \begin{abstract}
-	$abstract$
+$abstract$
 \end{abstract}
 $endif$
+
 
 $if(keywords)$\vspace{0.5em}
 \noindent\textsc{Keywords:} $for(keywords)$$keywords$$sep$, $endfor$
 $endif$
+
+\clearpage
 
 $if(toc)$
 	\tableofcontents
@@ -78,16 +65,14 @@ $endif$
 
 $body$
 
-$if(bibengine)$
-$if(bibengine == "biblatex")$
-	\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$if(biblatex)$
+	\printbibliography
 $endif$
-$if(bibengine == "bibtex")$
-	\bibliographystyle{$bibliographystyle}  % or another style compatible with natbib
-	\bibliography{$bibliography}            % Note: no .bib extension here
+$if(bibtex)$
+	\bibliographystyle{$bibliographystyle$}  % or another style compatible with natbib
+	\bibliography{$bibliography$}            % Note: no .bib extension here
 $endif$
-$endif
 
-$endif$
+
 
 \end{document}
