@@ -1,0 +1,23 @@
+---
+title: "GR LaTeX Template Example"
+author:
+  - name: Giuseppe Ragusa
+    affiliation: Department of Economics and Law, Sapienza University of Rome
+    email: giuseppe.ragusa@uniroma1.it
+    thanks: "Acknowledgment for first author"
+  - name: Second Author
+    affiliation: Department, University
+    email: email2@example.com
+format:
+  grlatex-pdf:
+    documentclass: grlatex
+    bibengine: biblatex
+    classoption: 
+      - colorheadings=true
+---
+
+# Introduzione
+
+Something
+
+

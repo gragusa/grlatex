@@ -1,0 +1,93 @@
+$if(bibengine)$
+$if(bibengine == "biblatex")$
+	% !BIB program = biber
+$endif$
+$if(bibengine == "bibtex")$
+  % !BIB program = biber
+$endif$
+$endif
+
+\documentclass[
+$if(classoption)$
+  $for(classoption)$$classoption$$sep$,$endfor$
+$endif$
+]{grlatex}
+
+
+$if(bibengine)$
+$if(bibengine == "biblatex")$
+\addbibresource{$bibliography}
+$endif$
+$endif
+
+
+% Load necessary packages
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{makecell}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+% Title information
+\title{$title$}
+
+% Author information with multiple authors and thanks
+\author{%
+$for(author)$
+  $author.name$$if(author.thanks)$\thanks{$author.thanks$}$endif$$if(author.affiliation)$\\$author.affiliation$$endif$$if(author.email)$\\$author.email$$endif$
+  $sep$ \and $endfor$
+}
+
+% Date
+$if(date)$
+\date{$date$}
+$else$
+\date{\today}
+$endif$
+
+% Begin document
+\begin{document}
+
+% Make title
+\maketitle
+
+% Abstract and keywords
+$if(abstract)$
+\begin{abstract}
+	$abstract$
+\end{abstract}
+$endif$
+
+$if(keywords)$\vspace{0.5em}
+\noindent\textsc{Keywords:} $for(keywords)$$keywords$$sep$, $endfor$
+$endif$
+
+$if(toc)$
+	\tableofcontents
+$endif$
+
+$body$
+
+$if(bibengine)$
+$if(bibengine == "biblatex")$
+	\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
+$if(bibengine == "bibtex")$
+	\bibliographystyle{$bibliographystyle}  % or another style compatible with natbib
+	\bibliography{$bibliography}            % Note: no .bib extension here
+$endif$
+$endif
+
+$endif$
+
+\end{document}
