@@ -1,3 +1,10 @@
+$if(fig-cap-position)$
+\PassOptionsToPackage{capposition=$fig-cap-position$}{floatrow}
+$endif$
+$if(cap-position)$
+\PassOptionsToPackage{capposition=$cap-position$}{floatrow}
+$endif$
+
 \documentclass[$if(classoption)$$for(classoption)$$classoption$$sep$,$endfor$$if(biblatex)$,bibengine=biblatex$endif$$if(bibtex)$,bibengine=bibtex$endif$$endif$]{grlatex}
 
 
@@ -23,13 +30,31 @@ $if(highlighting-macros)$
 $highlighting-macros$
 $endif$
 
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{tbph}
+
+
 % Title information
 $if(title)$
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
 
 % Author information with multiple authors and thanks
-\author{$for(author)$$author$ $affiliation$ \and $endfor$}
+\author{
+$for(by-author)$
+$it.name.literal$$if(it.acknowledgements)$\thanks{$it.acknowledgements$}$endif$\\
+$for(it.affiliations)$$if(it.department)${\small $it.department$}$if(it.name)$, $endif$$endif$$if(it.name)${\small $it.name$}$endif$$if(it.department)$\\$elseif(it.name)$\\$endif$$endfor$$if(it.email)${\small \href{mailto:$it.email$}{$it.email$}}$endif$$sep$\and $endfor$}
 
 % Date
 $if(date)$
@@ -72,7 +97,5 @@ $if(bibtex)$
 	\bibliographystyle{$bibliographystyle$}  % or another style compatible with natbib
 	\bibliography{$bibliography$}            % Note: no .bib extension here
 $endif$
-
-
 
 \end{document}

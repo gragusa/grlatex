@@ -1,14 +1,21 @@
 ---
 title: "GR LaTeX Template Example"
+thanks: |
+  I would like to thanks support from many people. 
 author:
   - name: Giuseppe Ragusa
-    department: Department of Economics and Law
-    affiliation: Sapienza University of Rome
+    affiliation: 
+      - name: Sapienza University
     email: giuseppe.ragusa@uniroma1.it
-    thanks: Acknowledgment for first author
-  - name: Second Author
-    affiliation: Department, University
-    email: email2@example.com
+    acknowledgements: "Acknowledgment for first author"
+  - name: Gino Pallino
+    affiliation: 
+      - name: Princeton University
+    email: gpallino@princeton.edu
+    acknowledgements: "Acknowledgment for second author"
+abstract: |
+  This document is a template demonstrating the APSR format. Make sure it is long enough to work with the automatic dropcap. That means you need at least three lines worth of text. That is a lot of text for this example, but the APSR allows 150 words in the abstract at the time of writing this example. This document is a template demonstrating the APSR format. Make sure it is long enough to work with the automatic dropcap. That means you need at least three lines worth of text. That is a lot of text for this example, but the APSR allows 150 words in the abstract at the time of writing this example. This document is a template demonstrating the APSR format. Make sure it is long enough to work with the automatic dropcap. That means you need at least three lines worth of text. That is a lot of text for this example, but the APSR allows 150 words in the abstract at the time of writing this example. This document is a template demonstrating the APSR format. Make sure it is long enough to work with the automatic dropcap. That means you need at least three lines worth of text. That is a lot of text for this example, but the APSR allows 150 words in the abstract at the time of writing this example.
+keywords: GMM, MLE, Effcient estimation.
 format:
   grlatex-pdf:
     documentclass: grlatex
@@ -17,10 +24,78 @@ format:
     classoption: 
       - colorheadings=true
     keep-tex: true
+execute:
+  warning: false
+  message: false
+  echo: false
 ---
 
 # Introduzione
 
-Something
+{{< lipsum 3 >}}
 
+$$
+\int g(X_i, \theta_0) d\,P = 0,
+$$
+where $g:\R^{d}\times \R^{k}\to \R^{m}$ and $P$ is aprobability measure. 
 
+{{< lipsum 4 >}}
+
+{{< lipsum 2 >}}
+
+# The model
+{{< lipsum 3 >}}
+
+```{r}
+#| fig-align: center
+#| label: fig-one
+#| fig-cap: |
+#|  {{< lipsum 1 >}}
+#| fig-pos: t
+#| echo: false
+#| fig-cap-location: top
+library(ggplot2)
+library(dplyr)
+library(ggsci)
+library(ggthemes)
+set.seed(10)
+x1 <- rnorm(300)
+x2 <- rnorm(300)
+x3 <- runif(300)
+x4 <- rchisq(300, 2)
+data.frame(x=c(x1, x2, x3, x4), 
+           d = c(
+             rep("Small", 300),
+             rep("Medium", 300),
+             rep("Large", 300),
+             rep("Huge", 300)
+           )) |> ggplot(aes(x=x)) + 
+  geom_histogram(aes(fill = d), alpha = 0.8, color = 'black') + 
+  facet_wrap(~d, scale="free") + scale_fill_aaas() + theme_few() +
+  theme(legend.position  = "none") + ylab("") + xlab("")
+```
+
+{{< lipsum 2 >}}
+
+```{r}
+#| label: tbl-test
+#| tbl-cap: |
+#|  Maecenas turp#| is velit, ultricies non elementum vel, luctus nec nunc. Nulla a diam interdum, faucibus sapien viverra, finibus metus. Donec non tortor diam. In ut elit aliquet, bibendum sem et, aliquam tortor. Donec congue, sem at rhoncus ultrices, nunc augue cursus erat, quis porttitor mauris libero ut ex. Nullam quis leo urna. Donec faucibus ligula eget pellentesque interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+#| warning: false
+library(modelsummary)
+library(tinytable)
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url)
+
+models <- list(
+  "OLS 1"     = lm(Donations ~ Literacy + Clergy, data = dat),
+  "Poisson 1" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat),
+  "Poisson 2" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 3"     = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+)
+
+modelsummary(models, output='tinytable')
+```
+
+{{< lipsum 2 >}}
